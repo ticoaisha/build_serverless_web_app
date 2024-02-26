@@ -16,8 +16,22 @@ Amplify Console hosts static web resources including HTML, CSS, JavaScript, and 
 
 ![Applicaiton architecture](/images/app_arch.png)
 
+#### Cost
+If you are using your own AWS account, this workshop uses AWS services that are mostly covered by the Free Tier allowance (if your account is less than 12 months old) but it may incur some costs. To minimize cost, make sure you deprovision and delete those resources when you are finished. You can find the instructions for how to do that under [Cleanup].
+
+#### Resources
+[AWS Official Website to the workshop](https://webapp.serverlessworkshops.io/)
+
 ## Setup
-AWS Cloud9
+For this workshop I used a single region: us-east-1 (US East - Northern Virginia). Please head to the workshop website to choose and confirm the region supported by this workshop.
+
+To complete this workshop, I used an AWS account in order to access to create AWS resources within that account.
+
+I used AWS Cloud9 IDE, which is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser. It includes a code editor, debugger, and terminal. Cloud9 comes pre-packaged with essential tools for popular programming languages and the AWS Command Line Interface (CLI) pre-installed so you don’t need to install files or configure your laptop for this workshop.
+
+Your Cloud9 environment will have access to the same AWS resources as the user with which you logged into the AWS Management Console. 
+
+### Setting up AWS Cloud9
 
 1. Go to the AWS Management Console, Select Services then select Cloud9 under Developer Tools. From the top-right of the Console, select an available region for this workshop. Once you have selected a region for Cloud9, use the same region for the entirety of this workshop.
 
@@ -46,44 +60,43 @@ Verify that your user is logged in by running the command aws sts get-caller-ide
 *Note. Keep an open scratch pad in Cloud9 or a text editor on your local computer for notes. When the step-by-step directions tell you to note something such as an ID or Amazon Resource Name (ARN), copy and paste that into your scratch pad.*
 
 ## Static Web Hosting
-This section explains the frontend structure. You’ll deploy the static website using AWS Amplify Console by first creating a git repository (in either CodeCommit or GitHub) and then pushing the site code.
+This section explains the frontend structure. I will deploy the static website using AWS Amplify Console by first creating a git repository (in either CodeCommit or GitHub) and then pushing the site code.
 
-##### Overview
+### Overview
 In this module you’ll configure AWS Amplify Console to host the static resources for your web application. In subsequent modules you’ll add dynamic functionality to these pages using JavaScript to call remote RESTful APIs built with AWS Lambda and Amazon API Gateway.
 
-###### Architecture Overview
+#### Architecture Overview
 The architecture for this module is very straightforward. All of your static web content including HTML, CSS, JavaScript, images and other files will be managed by AWS Amplify Console and served via Amazon CloudFront. Your end users will then access your site using the public website URL exposed by AWS Amplify Console. You don’t need to run any web servers or use other services in order to make your site available.
 
 ![Staic Web Hosting Architecture Overview](/images/static_web_hosting_arch_overview.png)
 
-Region
+### Region
 
-Region Selection
+#### Region Selection
 This workshop step can be deployed in any AWS region that supports the following services:
 
-AWS Cognito
-AWS Amplify Console
-AWS CodeCommit
+* AWS Cognito
+* AWS Amplify Console
+* AWS CodeCommit
 
 You can refer to the [AWS region table](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) in the AWS documentation to see which regions have the supported services.
 
 Once you’ve chosen a region, you should deploy all of the resources for this workshop there. Make sure you select your region from the drop down in the upper right corner of the AWS Console before getting started.
 
-Repository
+### Repository
 
-Create the git repository
+#### Create the git repository
 We will use AWS CodeCommit to host your site’s repository. CodeCommit is included in the AWS Free Tier.
 
-CodeCommit helper
+##### CodeCommit helper
 The AWS Cloud9 development environment comes with AWS managed temporary credentials that are associated with your IAM user. You use these credentials with the AWS git-remote-codecommit tool (A Git Remote Helper that makes it easier to interact with AWS CodeCommit). This tool is installed in Cloud9 by default. You can install it on your own machine by following the installation instructions.
 
-Setting up your CodeCommit repository
+##### Setting up your CodeCommit repository
 1. First, create a new CodeCommit repository from within your Cloud9 terminal window:
 
 ```
 aws codecommit create-repository \
   --repository-name wild-rydes
-
 
 ```
 
@@ -142,12 +155,13 @@ git push -u origin master
 
 10. Remove the temporary local repository you created in step 2: rm -rf ../aws-serverless-webapp-workshop
 
-Deploy
+### Deploy
 
-Deploy the site with AWS Amplify Console
+#### Deploy the site with AWS Amplify Console
 Next you’ll use the AWS Amplify Console to deploy the website you’ve just commited to git. The Amplify Console takes care of the work of setting up a place to store your static web application code and provides a number of helpful capabilities to simplify both the lifecycle of that application as well as enable best practices.
 
 1. Launch the Amplify Console
+
 2. Underneath Get Started, you’ll find a section for Amplify Hosting titled Host your web app. Click the Get started button within that section. If you are starting from the All apps page, choose New app, then Host web app in the upper right corner.
 
 ![Amplify get started](/images/amplify_get_started.png)
@@ -155,6 +169,7 @@ Next you’ll use the AWS Amplify Console to deploy the website you’ve just co
 3. Connect a repository: Select AWS CodeCommit and choose Continue
 
 ![Connect a repo](/images/connect_repo.png)
+
 4. From the drop down select the Repository and master Branch created today and select Next
 
 ![Add repo branch](/images/add_repo_branch.png)
@@ -199,9 +214,9 @@ Once completed, click the site URL to launch your Wild Rydes site.
 
 ![Just website](/images/just_website.png)
 
-Modify
+### Modify
 
-Modify the website
+#### Modify the website
 The AWS Amplify Console will rebuild and redeploy the app when it detects changes to the connected repository. Make a change to the main page to test out this process.
 
 1. From your Cloud9 environment open the index.html file in the /wild-rydes/public/ directory of the repository.
@@ -219,6 +234,7 @@ The AWS Amplify Console will rebuild and redeploy the app when it detects change
 Save the file
 
 3. Commit again to your git repository the changes:
+
 ```
 git add . 
 
@@ -237,19 +253,19 @@ Amplify Console will begin to build the site again soon after it notices the upd
 
 ![Title changes](/images/title_changed.png)
 
-Recap
+#### Summary
 AWS Amplify Console makes it easy to deploy static websites with continuous integration and continuous delivery. It is capable of building more complicated JavaScript framework-based applications and shows you a preview of your application as it renders on popular mobile platforms.
 
-In this module, you’ve created a static website which will be the base for our Wild Rydes business.
+We have created a static website which will be the base for our Wild Rydes business.
 
 ## User Management
 
-This section explains how to create users. You’ll configure user management for the website using Amazon Cognito.
+This section explains how to create users. We will configure user management for the website using Amazon Cognito.
 
-OVERVIEW
+### Overview
 In this module you’ll use the AWS Amplify CLI to create an Amazon Cognito User Pool to manage your users' accounts. You’ll deploy pages that enable customers to register as a new user, verify their email address, and sign into the site.
 
-Architecture Overview
+#### Architecture Overview
 When users visit your website they will first register a new user account. For the purposes of this workshop we’ll only require them to provide an email address and password to register. However, you can configure Amazon Cognito to require additional attributes in your own applications.
 
 After users submit their registration, Amazon Cognito will send a confirmation email with a verification code to the address they provided. To confirm their account, users will return to your site and enter their email address and the verification code they received. You can also confirm user accounts using the Amazon Cognito console if you want to use fake email addresses for testing.
@@ -258,14 +274,17 @@ After users have a confirmed account (either using the email verification proces
 
 ![User Mgmt Architecture Overview](/images/user_mgmt_arch_overview.png)
 
-AMPLIFY CLI
-Initialize AWS Amplify CLI
-Background
+### Amplify CLI
+
+#### Initialize AWS Amplify CLI
+
+##### Background
 The AWS Amplify Command Line Interface (CLI) is a unified toolchain to create, integrate, and manage the AWS cloud services for your app. The Amplify CLI toolchain is designed to work with the Amplify JavaScript library as well as the AWS Mobile SDKs for iOS and Android.
 
 AWS Amplify Authentication module provides Authentication APIs and building blocks for developers who want to create user authentication experiences.
 
 1. Install the Amplify CLI by running the following command from within your Cloud9 terminal window:
+
 ```
 npm install -g @aws-amplify/cli
 ```
@@ -274,14 +293,15 @@ npm install -g @aws-amplify/cli
 More information can be found in the documention here
 
 2. Configure your default AWS profile.
+
 ```
 echo '[profile default]' > ~/.aws/config
+
 ```
-
-
 3. Make sure you are in the root wild-rydes directory of the repository:
 
 4. Initialize amplify CLI by executing the following command:
+
 ```
 amplify init
 ```
@@ -295,6 +315,7 @@ Here is the output in the terminal:
 ![Initializing a project](/images/init_project.png)
 
 Verify that the initialization has finished by entering the following command. Version 4.29.3 or greater should be installed.
+
 ```
 amplify version
 
@@ -303,9 +324,12 @@ amplify version
 
 Next you will add an Amazon Cognito category to your AWS Amplify configuration, via the AWS Amplify CLI.
 
-USER POOL
-Create an Amazon Cognito User Pool using AWS Amplify CLI
-Background
+### User Pool
+
+#### Create an Amazon Cognito User Pool using AWS Amplify CLI
+
+##### Background
+
 The AWS Amplify Authentication module provides Authentication APIs and building blocks for developers who want to create user authentication experiences.
 
 Amazon Cognito User Pools is a full-featured user directory service to handle user registration, authentication, and account recovery. Amazon Cognito Federated Identities on the other hand, is a way to authorize your users to use AWS services.
@@ -314,7 +338,7 @@ Amplify interfaces with User Pools to store your user information. This includes
 
 In this section you use the Amplify CLI to create a new Cognito User Pool with the default settings. Then you use the Amazon Cognito Console to manage the new User Pool.
 
-Amazon Cognito
+##### Amazon Cognito
 Execute the following commands to add the Amazon Cognito User Pool from within the Cloud9 terminal window:
 
 ```
@@ -344,8 +368,10 @@ Amplify Console picks up the changes and begins building and deploying your web 
 
 ![Commit the changes](/images/commit_new_changes.png)
 
-APP CLIENT
-Check Your User Pool’s App Client
+### App Client
+
+#### Check Your User Pool’s App Client
+
 A Cognito Userpool and a new App client has been created by the AWS Amplify build. Let’s take a look at this app client.
 
 1. Go to the Amazon Cognito Console
@@ -368,20 +394,21 @@ Here you will see a new userpool generated by the AWS Amplify CLI that looks som
 
 ![Apps](/images/apps.png)
 
-How it Works:
+##### How it Works:
 Rather than configuring each service through a constructor or constants file, Amplify supports configuration through a centralized file called aws-exports.js which defines all the regions and service endpoints to communicate. Whenever you run amplify push or rebuild your web application by running a git commit, this file is automatically created, allowing you to focus on your application code. The Amplify CLI places this file in the appropriate source directory configured with amplify init.
 
 ❗ You won’t see updates to this file in your local file store because it is included in the .gitignore file.
 
+### Create a User
 
-CREATE A USER
-Create a new user for your user pool
+#### Create a new user for your user pool
 Note: Instead of having you write the browser-side code for managing the registration, verification, and sign in flows, we provide a working implementation in the assets you deployed in the first module by using the AWS Amplify Authentication UI component.
 
 The Authenticator component provides basic login/logout functionality for an application, as well as confirmation steps for new user registration and user login.
 
 Usage: <amplify-authenticator></amplify-authenticator>
-Implementation Validation
+
+##### Implementation Validation
 
 1. Visit /auth under your website domain, or choose the Giddy Up! button on the homepage of your site.
 
@@ -417,15 +444,15 @@ You should see a notification that the API is not configured.
 
 ![API is not configured](/images/api_not_config.png)
 
-Recap
+##### Summary 
 Amazon Cognito provides two different capabilities for managing users, federated identities and user pools. Amazon Cognito user pools handle almost any aspect about managing users, including login credentials, password resets, multifactor authentication and much more!
 
 In this module you used user pools to create a fully-managed user management system that allows you to authenticate your users and manage their user information. You updated your website to use the user pool, and used the AWS SDKs to provide a signin form on the site.
 
-Next
+##### Next
 After you have successfully logged into your web application, you can proceed to the next module, Serverless Backend.
 
-Extra
+##### Extra
 Try copying the auth_token you’ve received and paste that into an online JWT Decoder to understand what this token means for your application
 
 ![Decoder of auth token](/images/token_decode.png)
@@ -433,17 +460,20 @@ Try copying the auth_token you’ve received and paste that into an online JWT D
 ## Serverless Backend
 This section explains how to create an AWS Lambda function that will persist data to an Amazon DynamoDB table.
 
-OVERVIEW
+### Overview
 In this module you’ll use AWS Lambda and Amazon DynamoDB to build a backend process for handling requests from your web application. The browser application that you deployed in the first module allows users to request that a unicorn be sent to a location of their choice. In order to fulfill those requests, the JavaScript running in the browser invokes a service running in the cloud.
 
 You’ll implement a Lambda function that will be invoked each time a user requests a unicorn. The function selects a unicorn from the fleet, records the request in a DynamoDB table, and responds to the front-end application with details about the dispatched unicorn.
+
+#### Architecture overview
 
 ![Serverless Backend Architecture Overview](/images/serverless_be_arch.png)
 
 The function is invoked from the browser using Amazon API Gateway. You implement that connection in the next module. For this module, you test your function in isolation.
 
-DYNAMODB
-Create an Amazon DynamoDB Table
+### DynamoDB
+
+#### Create an Amazon DynamoDB Table
 Use the Amazon DynamoDB Console to create a new DynamoDB table. Call your table Rides and give it a partition key called RideId with type String. The table name and partition key are case sensitive. Make sure you use the exact IDs provided. Use the defaults for all other settings.
 
 After you’ve created the table, record the ARN for use in the next step.
@@ -467,12 +497,14 @@ Once the table is Active, Click on “Rides” to open the table settings and un
 
 ![Table ARN](/images/tbl_arn.png)
 
-IAM
-Create an IAM Role for Your Lambda Function
-Background
+### IAM
+
+#### Create an IAM Role for Your Lambda Function
+
+##### Background
 Every Lambda function has an IAM role associated with it. This role defines what other AWS services the function is allowed to interact with. In this workshop, you create an IAM role that grants your Lambda function permission to write logs to Amazon CloudWatch Logs and access to write items to your DynamoDB table.
 
-High-Level Instructions
+##### High-Level Instructions
 Use the IAM console to create a new role. Name it WildRydesLambda and select AWS Lambda for the role type. You’ll need to attach policies that grant your function permissions to write to Amazon CloudWatch Logs and put items to your DynamoDB table.
 
 Attach the managed policy called AWSLambdaBasicExecutionRole to this role to grant the necessary CloudWatch Logs permissions. Also, create a custom inline policy for your role that allows the dynamodb:PutItem action for the table you created in the previous section.
@@ -509,7 +541,6 @@ Begin typing PutItem into the search box labeled Filter actions and check the bo
 
 ![DynamoDB permiss PutItem](/images/DynamoDb_put_item.png)
 
-
 Select the Resources section.
 
 With the Specific option selected, choose the Add ARN link in the table section.
@@ -522,12 +553,14 @@ Under the "Review and create" tab enter DynamoDBWriteAccess for the policy name 
 
 ![Create DynamoDb policy](/images/create_dynamodb_policy.png)
 
-LAMBDA
-Create a Lambda Function for Handling Requests
-Background
+### Lambda
+
+#### Create a Lambda Function for Handling Requests
+
+##### Background
 AWS Lambda runs your code in response to events such as an HTTP request. In this step you build a function that processes API requests from the web application to dispatch a unicorn. In the next module you use Amazon API Gateway to create a RESTful API that exposes an HTTP endpoint that can be invoked from your users' browsers. Then you connect the Lambda function you create in this step to that API to create a fully functional backend for your web application.
 
-High-Level Instructions
+##### High-Level Instructions
 Use the AWS Lambda console to create a new Lambda function called RequestUnicorn that processes API requests. Copy and paste this example implementation into the AWS Lambda console’s editor for your function code.
 
 Configure your function to use the WildRydesLambda IAM role you created in the previous section.
@@ -555,7 +588,7 @@ Scroll down to the Function code section and replace the existing code in the in
 
 Click Deploy in the upper right above the code editor.
 
-Implementation Validation
+##### Implementation Validation
 For this module you will test the function that you built using the AWS Lambda console. In the next module you will add a REST API with API Gateway so you can invoke your function from the browser-based application that you deployed in the first module.
 
 From Test Tab, Configure test event.
@@ -595,19 +628,21 @@ Verify that the execution succeeded and that the function result looks like the 
 
 ![Test details](/images/test_details.png)
 
-Recap
+##### Summary
 AWS Lambda is a serverless Functions-as-a-Service (FaaS) product that removes the burden of managing servers to run your applications. You configure a trigger and set the role that the function can use and then can interface with almost anything you want from databases, to datastores, to other services either publicly on the internet or in your own Amazon Virtual Private Cloud (VPC). Amazon DynamoDB is a non-relational serverless database that can scale automatically to handle massive amounts of traffic and data without the need to manage any servers.
 
 In this module you created a DynamoDB table and a Lambda function to write data into it. In the next module, you create an Amazon API Gateway REST API and connect it to your application to capture ride details from your users.
 
-Next
+##### Next
 After testing your new function using the Lambda console, you can move on to the next module, RESTful APIs.
 
 ## RESTful APIs
 This section explains how to expose the Lambda function via an Amazon API Gateway as a RESTful API that the static website can call.
 
-OVERVIEW
+### Overview
 In this module you use API Gateway to expose the Lambda function you built in the previous module as a RESTful API. This API will be accessible on the public Internet. It will be secured using the Amazon Cognito user pool you created in the User Management module. Using this configuration you will then turn your statically hosted website into a dynamic web application by adding client-side JavaScript that makes AJAX calls to the exposed APIs.
+
+#### Architecture overview
 
 ![RESTfulAPIs Architecture Overview](/images/RESTful_arct.png)
 
@@ -617,8 +652,9 @@ The static website you deployed in the first module already has a page configure
 
 This module focuses on the steps required to build the cloud components of the API, but if you’re interested in how the browser code works that calls this API, you can inspect the ride.js source. In this case the application uses jQuery’s ajax() method to make the remote request.
 
-REST API
-Create a New REST API
+### REST API
+
+#### Create a New REST API
 Use the Amazon API Gateway console to create a new API named WildRydes.
 
 Go to the Amazon API Gateway Console, click Create API
@@ -633,7 +669,6 @@ Enter WildRydes for the API Name.
 
 Select Regional from the Endpoint Type dropdown.
 
-
 *Note. Edge optimized APIs are best for public services being accessed from the Internet. Regional endpoints are typically used for APIs that are accessed primarily from within the same AWS Region. Private APIs are for internal services inside of an Amazon VPC.*
 
 Choose Create API
@@ -642,12 +677,14 @@ Choose Create API
 
 ![API Created](/images/api_created.png)
 
-COGNITO
-Create a Cognito User Pools Authorizer
-Background
+### Cognito
+
+#### Create a Cognito User Pools Authorizer
+
+##### Background
 Amazon API Gateway can use the JWT tokens returned by Cognito User Pools to authenticate API calls. In this step you’ll configure an authorizer for your API to use the user pool you created in User Management.
 
-High-Level Instructions
+##### High-Level Instructions
 In the Amazon API Gateway console, create a new Cognito user pool authorizer for your API. Configure it with the details of the user pool that you created in the previous module. You can test the configuration in the console by copying and pasting the auth token presented to you after you log in via the /signin route of your current website.
 
 Under your newly created API, choose Authorizers.
@@ -672,7 +709,7 @@ Choose Create.
 
 ![Authorixer created](/images/auth_created.png)
 
-Verify your authorizer configuration
+##### Verify your authorizer configuration
 Open a new browser tab and visit /ride under your website’s domain.
 
 If you are redirected to the sign-in page, sign in with the user you created in the last module. You will be redirected back to /ride.
@@ -689,8 +726,9 @@ Click Test Authorizer button and verify that the response code is 200 and that y
 
 ![Test success](/images/code_201.png)
 
-API RESOURCE
-Create a new resource and method
+### API resource
+
+#### Create a new resource and method
 Create a new resource called /ride within your API. Then create a POST method for that resource and configure it to use a Lambda proxy integration backed by the RequestUnicorn function you created in the first step of this module.
 
 In the left nav, click on Resources under your WildRydes API.
@@ -733,8 +771,9 @@ Select the Method Request card, click Edit, select the WildRydes Cognito user po
 
 ![After updates](/images/meth_req_upd.png)
 
-DEPLOY
-Deploy Your API
+### DEPLOY
+
+### Deploy Your API
 From the Amazon API Gateway console, choose Actions, Deploy API. You’ll be prompted to create a new stage. You can use prod for the stage name.
 
 In the Actions drop-down list select Deploy API.
@@ -751,8 +790,9 @@ Record the Invoke URL. You will use it in the next section.
 
 ![Stage details](/images/stage_details.png)
 
-UPDATE CONFIG
-Update the Website Config
+### Update Config
+
+#### Update the Website Config
 Update the /src/config.js file in your website deployment to include the invoke URL of the stage you just created. You should copy the invoke URL directly from the top of the stage editor page on the Amazon API Gateway console and paste it into the _config.api.invokeUrl key of your site’s /src/config.js file. Make sure when you update the config file it still contains the updates you made in the previous module for your Cognito user pool.
 
 On your Cloud9 development environment open src/config.js
@@ -760,14 +800,12 @@ Update the invokeUrl setting under the api key in the config.js file. Set the va
 
 ![Invoke url to config file](/images/invoke_url_to_config.png)
 
-
 Save the modified file making sure the filename is still config.js.
 
 Commit the changes to your git repository:
 
 ```
 git add src/config.js 
-
 
 ```
 ![Updating per invoke url](/images/update_invoke_url.png)
@@ -780,7 +818,7 @@ Amplify Console should pick up the changes and begin building and deploying your
 
 ![Amplify updating](/images/ampl_upd_3.png)
 
-Implementation Validation
+#### Implementation Validation
 Visit /ride under your website domain.
 If you are redirected to the sign in page, sign in with the user you created in the previous module.
 After the map has loaded, click anywhere on the map to set a pickup location.
@@ -793,38 +831,98 @@ Choose Request Unicorn. You should see a notification in the right sidebar that 
 
 ![Screen that unicorn arrived]()
 
-Recap
+#### Summary
 Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale. You can easily plug in Authorization via Amazon Cognito and backends such as AWS Lambda to create completely serverless APIs.
 
 In this module you’ve used API Gateway to provide a REST API to the Lambda function created in the previous module. From there you’ve updated the website to use the API endpoint so that you can request rides and the information about the ride is saved in the DynamoDB table created earlier.
 
 Congratulations, you have completed the Wild Rydes Web Application Workshop! Check out our other workshops covering additional serverless use cases.
 
-Next
+#### Next
 See this workshop’s cleanup guide for instructions on how to delete the resources you’ve created.
-
 
 ## Cleanup
 Once you have finished with the workshop, delete the associated resources to prevent incurring ongoing charges in your AWS account.
 
-OVERVIEW
-This page provides instructions for cleaning up the resources created during the preceding modules.
+### REST API CLEANUP
 
-REST API CLEANUP
-REST API Cleanup
+#### REST API Cleanup
 Delete the REST API created in RESTful APIs step. There is a Delete API option in the Actions drop-down when you select your API in the Amazon API Gateway Console.
 
-Go to the Amazon API Gateway Console
-Select the API you created in RESTful APIs step.
-Expand the Actions drop-down and choose Delete API.
-Enter the name of your API when prompted and choose Delete API.
+1. Go to the Amazon API Gateway Console
+2. Select the API you created in RESTful APIs step.
+3. Expand the Actions drop-down and choose Delete API.
+4. Enter the name of your API when prompted and choose Delete API.
 
+### Backend Cleanup
 
+#### Serverless Backend Cleanup
+Delete the AWS Lambda function, IAM role and Amazon DynamoDB table you created in module 3.
 
+##### Lambda Function
+1. Go to the AWS Lambda console
+2. Select the RequestUnicorn function you created.
+3. From the Actions drop-down, choose Delete.
+4. Choose Delete when prompted to confirm.
 
+##### IAM Role
+1. Go to the AWS IAM Console
+2. Select Roles from the navigation menu.
+3. Type WildRydesLambda into the filter box and select the role you created.
+4. On the top right, click on the Delete button.
+5. Reenter role name and click Delete when prompted to confirm.
 
+##### DynamoDB Table
+1. Go to the Amazon DynamoDB Console
+2. Choose Tables in the navigation menu.
+3. Choose the Rides table.
+4. Choose Delete table from the Actions drop-down.
+5. Leave the checkbox to Delete all CloudWatch alarms for this table selected and choose Delete.
 
+### User Management Cleanup
 
+#### User Management Cleanup
+Delete the Amazon Cognito User Pool
+
+1. Go to the Amazon Cognito Console
+2. Choose Manage your User Pools.
+3. Select the WildRydes user pool you created.
+4. Choose Delete Pool in the upper right corner of the page.
+5. Complete the application deletion process.
+
+### Web Application Cleanup
+
+#### Web Application Cleanup
+Delete the AWS Amplify Console application and optionally the AWS CodeCommit or GitHub repository created:
+
+##### For the Amplify Console web application:
+1. Launch the Amplify Console console page.
+2. Select the application you launched today.
+3. From Actions in the top right corner, select Delete App
+4. Complete the application deletion process.
+
+##### For the IAM Role:
+1. Go to the AWS IAM Console
+2. Select Roles from the navigation menu.
+3. Type wildrydes-backend-role into the filter box and select the role.
+4. On the top right, click on the Delete role button.
+5. Reenter role name and click Delete when prompted to confirm.
+
+##### For the CodeCommit repository:
+1. Open the AWS CodeCommit console
+2. Select the radio button next to the repository created today.
+3. Select Delete repository from the upper right of the page.
+4. Complete the repository deletion process.
+
+### Cloud9 Cleanup
+
+#### Cloud9 Cleanup
+Delete the Cloud9 Development environment created today.
+
+1. Launch the Cloud9 console page.
+2. Select the environment you launched today.
+3. From the top navigation, select Delete
+4. Complete the application deletion process.
 
 
 
