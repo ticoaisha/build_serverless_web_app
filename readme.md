@@ -1,5 +1,22 @@
 -------------
+# Building Serverless Web App
 
+In this workshop I deployed a simple web application that enables users to request unicorn rides from the [Wild Rydes][wildrydes] fleet. The application will present users with an HTML based user interface for indicating the location where they would like to be picked up and will interface on the backend with a RESTful web service to submit the request and dispatch a nearby unicorn. The application will also provide facilities for users to register with the service and log in before requesting rides.
+
+### Application Architecture
+* AWS Lambda
+* Amazon API Gateway
+* Amazon S3
+* Amazon DynamoDB
+* Amazon Cognito
+* AWS Amplify Console
+
+#### Architecture explained
+Amplify Console hosts static web resources including HTML, CSS, JavaScript, and image files which are loaded in the user’s browser via S3. JavaScript executed in the browser sends and receives data from a public backend API built using Lambda and API Gateway. Amazon Cognito provides user management and authentication functions to secure the backend API. Finally, DynamoDB provides a persistence layer where data can be stored by the API’s Lambda function.
+
+![Applicaiton architecture](/images/app_arch.png)
+
+## Setup
 AWS Cloud9
 
 1. Go to the AWS Management Console, Select Services then select Cloud9 under Developer Tools. From the top-right of the Console, select an available region for this workshop. Once you have selected a region for Cloud9, use the same region for the entirety of this workshop.
@@ -28,7 +45,7 @@ Verify that your user is logged in by running the command aws sts get-caller-ide
 
 *Note. Keep an open scratch pad in Cloud9 or a text editor on your local computer for notes. When the step-by-step directions tell you to note something such as an ID or Amazon Resource Name (ARN), copy and paste that into your scratch pad.*
 
-#### Static Web Hosting
+## Static Web Hosting
 This section explains the frontend structure. You’ll deploy the static website using AWS Amplify Console by first creating a git repository (in either CodeCommit or GitHub) and then pushing the site code.
 
 ##### Overview
@@ -225,7 +242,7 @@ AWS Amplify Console makes it easy to deploy static websites with continuous inte
 
 In this module, you’ve created a static website which will be the base for our Wild Rydes business.
 
-User Management
+## User Management
 
 This section explains how to create users. You’ll configure user management for the website using Amazon Cognito.
 
@@ -413,7 +430,7 @@ Try copying the auth_token you’ve received and paste that into an online JWT D
 
 ![Decoder of auth token](/images/token_decode.png)
 
-SERVERLESS BACKEND
+## Serverless Backend
 This section explains how to create an AWS Lambda function that will persist data to an Amazon DynamoDB table.
 
 OVERVIEW
@@ -586,7 +603,7 @@ In this module you created a DynamoDB table and a Lambda function to write data 
 Next
 After testing your new function using the Lambda console, you can move on to the next module, RESTful APIs.
 
-RESTFUL APIS
+## RESTful APIs
 This section explains how to expose the Lambda function via an Amazon API Gateway as a RESTful API that the static website can call.
 
 OVERVIEW
@@ -787,7 +804,7 @@ Next
 See this workshop’s cleanup guide for instructions on how to delete the resources you’ve created.
 
 
-CLEANUP
+## Cleanup
 Once you have finished with the workshop, delete the associated resources to prevent incurring ongoing charges in your AWS account.
 
 OVERVIEW
